@@ -255,6 +255,53 @@ Result of VLSM planning operation.
 - `.success(allocations: [VLSMAllocation], freeBlocks: [IPv4Network])`
 - `.failure(failedRequirement: VLSMRequirement, allocations: [VLSMAllocation], freeBlocks: [IPv4Network])`
 
+### SubnetCalculatorViewModel
+
+View model for regular subnet calculations (suitable for SwiftUI integration).
+
+**Properties:**
+- `ipAddressInput: String` - IP address input
+- `prefixLength: Int` - Prefix length (0-32)
+- `allowP2P: Bool` - Allow /31 P2P networks
+- `network: IPv4Network?` - Current network (read-only)
+- `errorMessage: String?` - Validation error (read-only)
+- `subdivisions: [IPv4Network]` - Subdivided networks (read-only)
+
+**Computed Properties:**
+- `networkAddress`, `broadcastAddress`, `netmask`, `wildcardMask`
+- `firstUsable`, `lastUsable`, `totalAddresses`, `usableHosts`
+- `networkClass`, `binaryAddress`, `binaryNetmask`
+
+**Methods:**
+- `refresh()` - Manually trigger recalculation
+- `exportData() -> SubnetExportData?` - Export current network
+- `exportSubdivisions() -> [SubnetExportData]` - Export subdivisions
+
+### VLSMPlannerViewModel
+
+View model for VLSM planning (suitable for SwiftUI integration).
+
+**Properties:**
+- `baseNetworkInput: String` - Base network CIDR
+- `requirementsInput: String` - Comma-separated requirements
+- `reserveNetworkBroadcast: Bool` - Reserve network/broadcast
+- `allowP2P: Bool` - Allow /31 P2P networks
+- `baseNetwork: IPv4Network?` - Current base network (read-only)
+- `requirements: [VLSMRequirement]` - Parsed requirements (read-only)
+- `planResult: VLSMResult?` - Planning result (read-only)
+- `isSuccess: Bool` - Success indicator (read-only)
+
+**Computed Properties:**
+- `allocations`, `freeBlocks`, `failedRequirement`
+- `totalAllocated`, `totalFree`, `summaryMessage`
+
+**Methods:**
+- `refresh()` - Manually trigger planning
+- `exportJSON() throws -> String` - Export to JSON
+- `exportCSV() -> String` - Export to CSV
+- `setLabel(_:forAllocationAt:)` - Add label to allocation
+- `toggleLock(forAllocationAt:)` - Toggle lock status
+
 ## Acceptance Criteria Examples
 
 ### Regular Subnetting
